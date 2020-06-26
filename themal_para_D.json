@@ -1,0 +1,35 @@
+# -- parameter --
+{
+"every_outnum":"5.0e3",      # 出力毎タイムステップ
+"out_file_front":"test", # 出力ファイル前半分
+"out_ext":".dat",         # 拡張子
+    
+"Restart":"test",         # 前半のファイル名
+"restartnum":"500000",     # 後半のファイル名（result/[Restart+restartnum+in_ext]で検索）
+"in_ext":".dat",
+
+
+"nt":"5.0e5",          # 時間ステップ数
+"dt":"1.0e-3",       # 時間刻み幅[s]
+# -- material1 銅--
+"lam1":"386.0",     # 熱伝導率[W/(mK)]
+"rho1":"8.96e3",    # 密度[kg/m^3]
+"c1":"0.385e3",     # 比熱[J/(kgK)]
+
+# -- 初期値 --
+"init_val":"300.0",       # 初期温度
+
+# -- boundary condition --
+# left_bd1 = 境界条件  0 = 等温
+#                     1 = 断熱条件(勾配0)
+# left_bd2 = 境界値   0 = 温度[K]
+#                     1 = なし (0)
+"bd1_con":"0",       # 
+"bd1_val":"1000.0",   # 
+"bd2_con":"1",       # 
+"bd2_val":"0.0",   # 
+"bd3_con":"0",       # 
+"bd3_val":"300.0",       # 
+"bd4_con":"1",       # 
+"bd4_val":"0"       # 
+}
