@@ -5,7 +5,7 @@
 "out_ext":".dat",         # 拡張子
     
 "Restart":"test",         # 前半のファイル名
-"restartnum":"500000",     # 後半のファイル名（result/[Restart+restartnum+in_ext]で検索）
+"restartnum":"000000",     # 後半のファイル名（result/[Restart+restartnum+in_ext]で検索）
 "in_ext":".dat",
 
 
@@ -24,12 +24,12 @@
 #                     1 = 断熱条件(勾配0)
 # left_bd2 = 境界値   0 = 温度[K]
 #                     1 = なし (0)
-"bd1_con":"0",       # 
-"bd1_val":"1000.0",   # 
-"bd2_con":"1",       # 
-"bd2_val":"0.0",   # 
-"bd3_con":"0",       # 
-"bd3_val":"300.0",       # 
-"bd4_con":"1",       # 
-"bd4_val":"0"       # 
+"bd1_con":"0",       # x+ 
+"bd1_val":"1000.0",   # x+
+"bd2_con":"0",       # x-
+"bd2_val":"300.0",       # x-
+"bd3_con":"1",       # y+
+"bd3_val":"0.0",   # y+
+"bd4_con":"1",       # y-
+"bd4_val":"0"       # y-
 }

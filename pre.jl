@@ -1,10 +1,12 @@
+using Printf
+
 function main()
-    xy_or_r = 1          # 1:x,y 2:r,t
+    xy_or_r = 2          # 1:x,y 2:r,t
     xnum = 200           #       2:rnum
-    ynum = 200           #       2:tnum
+    ynum = 100           #       2:tnum
     lenx = 1.0           #       2:inr
     leny = 2.0           #       2:outr
-    st_ang  = pi/2  # 2:angle
+    st_ang  = pi/2       # 2:angle
     en_ang  = 0          # 2:angle
 
     outdir = "grid"
@@ -36,8 +38,8 @@ function mk_gird(xnum,ynum,lenx,leny,xy_or_r,st_ang,en_ang,outdir)
     if xy_or_r == 1
         for i in 2:xnum_max-1
             for j in 2:ynum_max-1
-                x = lenx/xnum*(i-2)
-                y = leny/ynum*(j-2)
+                x = lenx/(xnum)*(i-2)
+                y = leny/(ynum)*(j-2)
                 nodes[i,j,1] = x
                 nodes[i,j,2] = y
             end 
@@ -45,8 +47,8 @@ function mk_gird(xnum,ynum,lenx,leny,xy_or_r,st_ang,en_ang,outdir)
     elseif xy_or_r == 2
         for i in 2:xnum_max-1
             for j in 2:ynum_max-1
-                r = lenx + (leny-lenx)/xnum*(j-2)
-                theta = st_ang - (st_ang-en_ang)/ynum*(i-2)
+                r = lenx + (leny-lenx)/ynum*(j-2)
+                theta = st_ang - (st_ang-en_ang)/xnum*(i-2)
                 x = r * cos(theta)
                 y = r * sin(theta)
                 nodes[i,j,1]=x
@@ -79,21 +81,26 @@ function mk_gird(xnum,ynum,lenx,leny,xy_or_r,st_ang,en_ang,outdir)
         write(f,"nodes: xnum, ynum , x, y\n")
         for i in 1:xnum_max
             for j in 1:ynum_max
-                write(f,string(i)*" "*string(j)*" "*string(nodes[i,j,1])*" "*string(nodes[i,j,2])*"\n")
+                x = @sprintf("%8.8e", nodes[i,j,1])
+                y = @sprintf("%8.8e", nodes[i,j,2])
+                write(f,string(i)*" "*string(j)*" "*x*" "*y*"\n")
             end
         end
     end
     println("write "*fff)
 
     # nodes_forvtk
-    nodes_num = zeros(xnum_max, ynum_max)
+    nodes_num = zeros(Int,xnum_max, ynum_max)
     fff=outdir*"/nodes_forvtk"
     open(fff,"w") do f
         write(f,"nodes: xnum, ynum , x, y\n")
         k=1
         for i in 2:xnum_max-1
             for j in 2:ynum_max-1
-                write(f,string(k)*" "*string(nodes[i,j,1])*" "*string(nodes[i,j,2])*" "*string(nodes[i,j,3])*"\n")
+                x = @sprintf("%8.8e", nodes[i,j,1])
+                y = @sprintf("%8.8e", nodes[i,j,2])
+                z = @sprintf("%8.8e", nodes[i,j,3])
+                write(f,string(k)*" "*x*" "*y*" "*z*"\n")
                 nodes_num[i,j] = k
                 k = k+1
             end
@@ -112,9 +119,13 @@ function mk_gird(xnum,ynum,lenx,leny,xy_or_r,st_ang,en_ang,outdir)
     open(fff,"w") do f
         write(f,"elements:cell_xnum, lup,rup,ldown,rdown \n")
         k=1
-        for i in 2:xnum_max-1
-            for j in 2:ynum_max-1
-                write(f,string(k)*" "*string(nodes_num[i,j])*" "*string(nodes_num[i,j+1])*" "*string(nodes_num[i+1,j+1])*" "*string(nodes_num[i+1,j])*"\n")
+        for i in 2:xnum_max-2
+            for j in 2:ynum_max-2
+                d1 = @sprintf("%1.0f", nodes_num[i,j])
+                d2 = @sprintf("%1.0f", nodes_num[i,j+1])
+                d3 = @sprintf("%1.0f", nodes_num[i+1,j+1])
+                d4 = @sprintf("%1.0f", nodes_num[i+1,j])
+                write(f,string(k)*" "*d1*" "*d2*" "*d3*" "*d4*"\n")
                 k = k+1
             end
         end
@@ -153,7 +164,9 @@ function vecA(nodes,xnum_max,ynum_max,outdir)
         write(f,"vecAx: xnum, ynum , x vec, y vec\n")
         for i in 1:xnum_max
             for j in 1:ynum_max-1
-                write(f,string(i)*" "*string(j)*" "*string(vecAx[i,j,1])*" "*string(vecAx[i,j,2])*"\n")
+                x = @sprintf("%8.8f", vecAx[i,j,1])
+                y = @sprintf("%8.8f", vecAx[i,j,2])
+                write(f,string(i)*" "*string(j)*" "*x*" "*y*"\n")
             end
         end
     end
@@ -164,7 +177,9 @@ function vecA(nodes,xnum_max,ynum_max,outdir)
         write(f,"vecAy: xnum, ynum , x vec, y vec\n")
         for i in 1:xnum_max-1
             for j in 1:ynum_max
-                write(f,string(i)*" "*string(j)*" "*string(vecAy[i,j,1])*" "*string(vecAy[i,j,2])*"\n")
+                x = @sprintf("%8.8f", vecAy[i,j,1])
+                y = @sprintf("%8.8f", vecAy[i,j,2])
+                write(f,string(i)*" "*string(j)*" "*x*" "*y*"\n")
             end
         end
     end
@@ -172,11 +187,11 @@ function vecA(nodes,xnum_max,ynum_max,outdir)
 end
 
 function make_dir(outdir)
-    k=0
+    k = 0
     try rm(outdir,recursive=true)
     catch
         mkdir(outdir)
-        k=1
+        k = 1
     end
 
     if k == 0

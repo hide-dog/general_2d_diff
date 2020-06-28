@@ -1,4 +1,4 @@
-function set_initQbase(xmax,ymax,restart_file,init_T,out_file_front,out_ext,out_dir)
+function set_initQbase(xmax,ymax,nodes,restart_file,init_T,out_file_front,out_ext,out_dir,restart_num)
     Qbase=[]
     cellxmax = xmax - 1
     cellymax = ymax - 1
@@ -11,18 +11,18 @@ function set_initQbase(xmax,ymax,restart_file,init_T,out_file_front,out_ext,out_
         restart_check=1
     end
 
-    if restart_check == 0
+    if restart_check == 1
         Qbase=setup_init_value(cellxmax,cellymax,init_T)
         println("Start Initial condition")
         restart_num=0
-        output_result(0,Qbase,cellxmax,cellymax,out_file_front,out_ext,out_dir)
-    elseif restart_check == 1
+        output_result(0,nodes,Qbase,cellxmax,cellymax,out_file_front,out_ext,out_dir)
+    elseif restart_check == 0
         println("restart error")
         println("Please check restart file")
         throw(UndefVarError(:x))
     end
 
-    return Qbase,cellxmax,cellymax
+    return Qbase,cellxmax,cellymax,restart_num
 end
 
 function setup_init_value(cellxmax,cellymax,init_T)

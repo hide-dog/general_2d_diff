@@ -59,13 +59,11 @@ function read_para(dict)
     j=4:v
     j=5:p
     =#
-    bdcon=[]
+    bdcon = Any[]
     k=1
     while true
         try
-            bd=[parse(Int,dict["bd"*string(k)*"_con"]),parse(Float64,dict["bd"*string(k)*"_rho"]),
-                parse(Float64,dict["bd"*string(k)*"_u"]),parse(Float64,dict["bd"*string(k)*"_v"]),
-                parse(Float64,dict["bd"*string(k)*"_p"]),parse(Float64,dict["bd"*string(k)*"_T"])]
+            bd=[parse(Int,dict["bd"*string(k)*"_con"]),parse(Float64,dict["bd"*string(k)*"_val"])]
             push!(bdcon,bd)
         catch
             break
