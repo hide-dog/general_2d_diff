@@ -40,7 +40,7 @@ function setup_restart_value(cellxmax,cellymax,out_dir,restart_file)
 
     skipnum=1
     fff=[]
-    open(indir*"/"*restart, "r") do f
+    open("result/"*restart_file, "r") do f
         fff=read(f,String)
     end 
     fff=split(fff,"\n",keepempty=false)
@@ -49,15 +49,10 @@ function setup_restart_value(cellxmax,cellymax,out_dir,restart_file)
         fff[i]=replace(fff[i]," \r" => "")
     end
     
-    for i in 1:cellxmax
-        for j in 1:cellymax
+    for i in 2:cellxmax-1
+        for j in 2:cellymax-1
             temp = split(fff[i+skipnum]," ")
-
-            x = parse(Int64,temp[1]) 
-            y = parse(Int64,temp[2]) 
-            for k in 1:4
-                Qbase[x,y,k]=parse(Float64,temp[2+k]) 
-            end
+            Qbase[i,j] = parse(Float64,temp[1]) 
         end
     end
     return Qbase
