@@ -1,6 +1,8 @@
 # src path
-#src_path="C:\\Users\\秀人\\Downloads\\一般二次元座標拡散方程式-20200430T100734Z-001\\一般二次元座標拡散方程式\\一般座標系\\General2d_diff\\src\\"
-src_path="C:\\Users\\Koike\\Desktop\\git\\general_2d_diff\\src\\"
+# srcまでの絶対パスを記入
+src_path="C:\\Users\\xxxxx\\Desktop\\git\\general_2d_diff\\src\\"
+
+
 
 # main (変更しないこと)
 src_read="read_grid.jl"
